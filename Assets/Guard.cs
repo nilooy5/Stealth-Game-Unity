@@ -22,6 +22,6 @@ public class Guard : MonoBehaviour {
             Gizmos.DrawLine (previousPosition, waypoint.position);
             previousPosition = waypoint.position;
         }
-        Gizmos.DrawLine(previousPosition, startingPosition)
+        Gizmos.DrawLine(previousPosition, startingPosition);
     }
 }
