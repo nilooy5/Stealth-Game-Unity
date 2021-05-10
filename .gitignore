@@ -1,0 +1,12 @@
+.vs/
+.vscode/
+Library/
+Logs/
+obj/
+Packages/
+ProjectSettings/
+Temp/
+UserSettings/
+Assembly-CSharp.csproj
+Stealth Game.sln
+*.meta
