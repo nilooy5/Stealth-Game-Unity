@@ -15,8 +15,13 @@ public class Guard : MonoBehaviour {
     }
 
     void OnDrawGizmos() {
+        Vector3 startingPosition = pathHolder.GetChild(0).position;
+        Vector3 previousPosition = startingPosition;
         foreach (Transform waypoint in pathHolder) {
             Gizmos.DrawSphere(waypoint.position, .3f);
+            Gizmos.DrawLine (previousPosition, waypoint.position);
+            previousPosition = waypoint.position;
         }
+        Gizmos.DrawLine(previousPosition, startingPosition)
     }
 }
