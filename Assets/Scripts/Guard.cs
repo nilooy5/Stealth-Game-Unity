@@ -5,6 +5,7 @@ public class Guard : MonoBehaviour {
     
     public float waitTime = .3f;
     public float speed = 5;
+    public float turnSpeed = 90;
     
     public Transform pathHolder;
     void Start() {
@@ -19,7 +20,7 @@ public class Guard : MonoBehaviour {
     void Update() {
     }
 
-    IEnumerator FollowPath(Vector3[] waypoints) {
+    IEnumerator FollowPath (Vector3[] waypoints) {
         transform.position = waypoints[0];
         int targetWaypointIndex = 1;
         Vector3 targetWaypoint = waypoints [targetWaypointIndex];
@@ -33,6 +34,10 @@ public class Guard : MonoBehaviour {
             }
             yield return null;
         }
+    }
+
+    IEnumerator TurnToFace (Vector3 lookTarget) {
+        
     }
 
     void OnDrawGizmos() {
