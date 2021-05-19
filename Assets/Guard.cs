@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Guard : MonoBehaviour {
+
+    IEnumerator currentMoveCoroutine;
+    int i = 0;
+    float speed = 6;
     
     public Transform pathHolder;
     void Start() {
@@ -11,10 +15,19 @@ public class Guard : MonoBehaviour {
             waypoints[i] = pathHolder.GetChild(i).position;
         }
     }
-
-    // Update is called once per frame
+    
     void Update() {
-        
+        // for (int i = 0; i < pathHolder.childCount; i++) {
+            if (Input.GetKeyDown (KeyCode.Space)) {
+                if (currentMoveCoroutine != null) {
+                    StopCoroutine(currentMoveCoroutine);
+                }
+                currentMoveCoroutine = MoveGuard (pathHolder.GetChild(i).position);
+                StartCoroutine (currentMoveCoroutine);
+                i ++;
+                i = i % pathHolder.childCount;
+            }
+        // }
     }
 
     void OnDrawGizmos() {
@@ -26,5 +39,14 @@ public class Guard : MonoBehaviour {
             previousPosition = waypoint.position;
         }
         Gizmos.DrawLine(previousPosition, startingPosition);
+    }
+
+    IEnumerator MoveGuard (Vector3 destination) {
+        
+        while (transform.position != destination) {
+
+            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+            yield return null;
+        }
     }
 }
