@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Guard : MonoBehaviour {
-
-    IEnumerator currentMoveCoroutine;
-    int i = 0;
-    float speed = 6;
+    
+    public float waitTime = .3f;
+    public float speed = 5;
     
     public Transform pathHolder;
     void Start() {
@@ -14,20 +12,26 @@ public class Guard : MonoBehaviour {
         for (int i = 0; i < waypoints.Length; i++) {
             waypoints[i] = pathHolder.GetChild(i).position;
         }
+        StartCoroutine (FollowPath(waypoints));
     }
     
     void Update() {
-        // for (int i = 0; i < pathHolder.childCount; i++) {
-            if (Input.GetKeyDown (KeyCode.Space)) {
-                if (currentMoveCoroutine != null) {
-                    StopCoroutine(currentMoveCoroutine);
-                }
-                currentMoveCoroutine = MoveGuard (pathHolder.GetChild(i).position);
-                StartCoroutine (currentMoveCoroutine);
-                i ++;
-                i = i % pathHolder.childCount;
+    }
+
+    IEnumerator FollowPath(Vector3[] waypoints) {
+        transform.position = waypoints[0];
+        int targetWaypointIndex = 1;
+        Vector3 targetWaypoint = waypoints [targetWaypointIndex];
+
+        while (true) {
+            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, speed * Time.deltaTime);
+            if (transform.position == targetWaypoint) {
+                targetWaypointIndex = (targetWaypointIndex + 1) % waypoints.Length;
+                targetWaypoint = waypoints [targetWaypointIndex];
+                yield return new WaitForSeconds(waitTime);
             }
-        // }
+            yield return null;
+        }
     }
 
     void OnDrawGizmos() {
@@ -39,14 +43,5 @@ public class Guard : MonoBehaviour {
             previousPosition = waypoint.position;
         }
         Gizmos.DrawLine(previousPosition, startingPosition);
-    }
-
-    IEnumerator MoveGuard (Vector3 destination) {
-        
-        while (transform.position != destination) {
-
-            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-            yield return null;
-        }
     }
 }
