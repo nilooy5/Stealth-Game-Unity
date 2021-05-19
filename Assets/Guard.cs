@@ -6,7 +6,10 @@ public class Guard : MonoBehaviour {
     
     public Transform pathHolder;
     void Start() {
-        
+        Vector3[] waypoints = new Vector3[pathHolder.childCount];
+        for (int i = 0; i < waypoints.Length; i++) {
+            waypoints[i] = pathHolder.GetChild(i).position;
+        }
     }
 
     // Update is called once per frame
