@@ -752,7 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTime: 0.3
-  speed: 5
+  speed: 3.36
   turnSpeed: 90
   pathHolder: {fileID: 1511090856}
 --- !u!1 &1667970595
