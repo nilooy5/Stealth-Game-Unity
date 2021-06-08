@@ -8,6 +8,7 @@ public class Guard : MonoBehaviour {
     public float turnSpeed = 90;
     
     public Transform pathHolder;
+
     void Start() {
         Vector3[] waypoints = new Vector3[pathHolder.childCount];
         for (int i = 0; i < waypoints.Length; i++) {
@@ -24,6 +25,7 @@ public class Guard : MonoBehaviour {
         transform.position = waypoints[0];
         int targetWaypointIndex = 1;
         Vector3 targetWaypoint = waypoints [targetWaypointIndex];
+        transform.LookAt(targetWaypoint);
 
         while (true) {
             transform.position = Vector3.MoveTowards(transform.position, targetWaypoint, speed * Time.deltaTime);
@@ -31,13 +33,21 @@ public class Guard : MonoBehaviour {
                 targetWaypointIndex = (targetWaypointIndex + 1) % waypoints.Length;
                 targetWaypoint = waypoints [targetWaypointIndex];
                 yield return new WaitForSeconds(waitTime);
+                yield return StartCoroutine(TurnToFace(targetWaypoint));
             }
             yield return null;
         }
     }
 
     IEnumerator TurnToFace (Vector3 lookTarget) {
-        
+        Vector3 dirToLookTarget = (lookTarget - transform.position).normalized;
+        float targetAngle = 90 - Mathf.Atan2(dirToLookTarget.z, dirToLookTarget.x) * Mathf.Deg2Rad;
+
+        while (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, targetAngle)) > 0.05f) {
+            float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, turnSpeed * Time.deltaTime);
+            transform.eulerAngles = Vector3.up * angle;
+            yield return null;
+        }
     }
 
     void OnDrawGizmos() {
